@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+  <link href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+  <title>ToysForReal</title>
+
+  <style>
+    .card-image-top {
+      width: 100%;
+      height: 25vw;
+      object-fit: cover;
+    }
+
+    .shopbody {
+      margin-top: 15vh;
+    }
+
+    body {
+      background-image: url('https://imgur.com/vlHh0Jg.png');
+      font-family: "Raleway", sans-serif;
+    }
+
+    footer {
+      margin: 0;
+      padding-top: 5px;
+      padding-bottom: 5px;
+      color: #f7f4f3;
+      text-align: center;
+    }
+
+    hr {
+      border: 1px solid white;
+    }
+
+    h1 {
+      color: #f7f4f3;
+      font-size: 35pt;
+    }
+
+    h3 {
+      color: #f7f4f3;
+      font-size: 25pt;
+    }
+
+    .navbar-brand {
+      color: white;
+      margin-left: 2vh;
+    }
+
+    #Dolls {
+      margin-bottom: 5vh;
+    }
+
+    #Cars {
+      margin-bottom: 5vh;
+    }
+
+    #Sets {
+      margin-bottom: 5vh;
+    }
+
+    #Misc {
+      margin-bottom: 5vh;
+    }
+
+    .dropdown-menu {
+      margin-left: 1vh;
+    }
+
+    .btn-sm {
+      background-color: #ff5f42;
+      color: white;
+    }
+
+    .btn-outline-danger {
+      margin-left: 2vh;
+    }
+
+    .card {
+      box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.409);
+    }
+    
+  </style>
+
+  <script>
+    var cart = [];
+    var product = [
+      {prod_name: 'Stuffed Fairy Dolls', prod_price: 500},
+      {prod_name: 'Miffy Toys', prod_price: 450},
+      {prod_name: 'Barbie and Dogs', prod_price: 750},
+      {prod_name: 'Barbie on a Car', prod_price: 800},
+      {prod_name: 'Baby Alive Lulu Achoo', prod_price: 1000},
+      {prod_name: 'Baby Alive Happy Hungry', prod_price: 1000},
+      {prod_name: 'Hot Wheels Porsche 935', prod_price: 300},
+      {prod_name: 'Hot Wheels 70 Dodge Charger', prod_price: 300},
+      {prod_name: 'CAT Construction Toy Dump Truck', prod_price: 600},
+      {prod_name: 'CAT Construction Toy Excavator', prod_price: 700},
+      {prod_name: 'Remote Control Racing Car (Lamborghini)', prod_price: 1650},
+      {prod_name: 'Optimus Prime Remote Control Toy', prod_price: 2000},
+      {prod_name: 'Kitchen Toy Set', prod_price: 1350},
+      {prod_name: 'Medical Doctor Playset', prod_price: 1200},
+      {prod_name: 'Paw Patrol Lifeguard Pups Action Pack Gift Set', prod_price: 1735},
+      {prod_name: 'Sylvanian Families Red Roof Country Home Gift Set', prod_price: 5340},
+      {prod_name: 'Cashier Toy - Cash Register Playset', prod_price: 2370},
+      {prod_name: 'BBQ Grill Toy Set', prod_price: 2500},
+      {prod_name: 'Slime', prod_price: 20},
+      {prod_name: 'Building Blocks', prod_price: 1000},
+      {prod_name: 'Pop It', prod_price: 375},
+      {prod_name: 'Fidget Spinner', prod_price: 100},
+      {prod_name: 'Stress Ball', prod_price: 300},
+      {prod_name: 'Rubiks Cube', prod_price: 500}
+    ];
+
+    function showCart() {
+      if (cart.length == 0) {
+        document.getElementById("ulcart").innerHTML = '<li class= "list-group-item d-flex justify-content-center"><em>No items in the cart.</em></li>';
+        document.getElementById("txttotal").innerHTML = 'P 0.00';
+        document.getElementById("cust_order").value = JSON.stringify(cart);
+      }
+      else {
+        var total = 0;
+        document.getElementById("ulcart").innerHTML = '';
+        for (var i = 0; i < cart.length; i++) {
+          total += cart[i].prod_price;
+          document.getElementById("ulcart").innerHTML += '<li class= "list-group-item d-flex justify-content-between"><span class="d-inline-block">' + cart[i].prod_name + '</span>' + '<span class="d-inline-block">' + 'Php' + cart[i].prod_price + '</span>' + '<button class="btn btn-outline-danger" onclick="remove(' + i + ')">Remove</button>' + '</li>';
+        }
+        document.getElementById("txttotal").innerHTML = total.toFixed(2);
+        document.getElementById("cust_order").value = JSON.stringify(cart);
+      }
+    }
+
+    function addToCart(event) {
+      var productItem = Number(event.target.id.slice(3, 5)) - 1;
+      cart.push(product[productItem]);
+      showCart();
+    }
+
+    function remove(i) {
+      cart.splice(i, 1);
+      showCart();
+    }
+
+  </script>
+</head>
+
+<body class="container">
+  <div class="shopbody">
+    <nav class="navbar fixed-top shadow p-3 mb-4" style=" background-color:#ff5f42">
+      <div class="container-fluid">
+        <a class="nav-link dropdown-toggle navbar-brand nav-item dropdown" data-bs-toggle="dropdown" href="#"
+          role="button" aria-expanded="false">Categories</a>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="#Dolls">Dolls</a></li>
+          <li><a class="dropdown-item" href="#Cars">Cars and Trucks</a></li>
+          <li><a class="dropdown-item" href="#Sets">Toy Sets</a></li>
+          <li><a class="dropdown-item" href="#Misc">Miscellaneous</a></li>
+        </ul>
+        <a class="navbar-brand" href="page.html">Home</a>
+        <a class="navbar-brand" href="abtcompany.html">About Company</a>
+        <button class="btn btn-outline-light" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
+          aria-controls="offcanvasNavbar">
+          <i class="bi bi-cart-plus"></i>
+        </button>
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Checkout</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <div class="card">
+              <div class="card-body">
+                <h5>Your Cart</h5>
+                <ul class="list-group list-group-flush" id="ulcart">
+                  <li class="list-group-item d-flex justify-content-center"><em>No items in the cart.</em></li>
+                </ul>
+                <h6 class="d-flex justify-content-between p-3">
+                  <span class="d-inline-block">Total</span>
+                  <span class="d-inline-block" id="txttotal">P 0.00</span>
+                </h6>
+              </div>
+              <div class="card-footer">
+                <h5 class="mt-3">Delivery details</h5>
+                <form action="http://sirjm.infinityfreeapp.com/checkout.php" method="get">
+                  <div class="mb3">
+                    <label for="txtName" class="form-label">Name</label>
+                    <input id="txtName" type="text" class="form-control" name="cust_name">
+                  </div>
+                  <br>
+                  <div class="mb3">
+                    <label for="txtEmail" class="form-label">Email</label>
+                    <input id="txtEmail" type="text" class="form-control" name="cust_email">
+                  </div>
+                  <br>
+                  <div class="mb3">
+                    <label for="txtAddr" class="form-label">Address</label>
+                    <input id="txtAddr" type="text" class="form-control" name="cust_addr">
+                  </div>
+                  <br>
+                  <input type="hidden" name="cust_order" id="cust_order">
+                  <div class="mb-3">
+                    <input type="submit" value="Checkout" class="btn btn-outline-dark">
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <div class="row mb-6">
+      <div id="Dolls">
+        <h1>ToysForReal</h1>
+        <br>
+        <h1>Dolls</h1>
+          <div class="row g-4">
+            <div class="col">
+            <div class="card h-100  shadow p-3 mb-5">
+                <img
+                  src="https://imgur.com/5i9n4f8.png"
+                  alt="hi" class="card-image-top">
+                <div class="card-body">
+                  <h5 class="card-title">Stuffed Fairy Dolls</h5>
+                  <h6 class="card-subtitle mb-3 text-body-secondary">P 500.00</h6>
+                  <button class="btn btn-sm btn-light" id="btn1" onclick="addToCart(event)">Add to
+                    Cart</button>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+            <div class="card h-100  shadow p-3 mb-5">
+                <img src="https://imgur.com/99NoxSX.png"
+                  alt="hi" class="card-image-top">
+                <div class="card-body">
+                  <h5 class="card-title">Miffy Toys</h5>
+                  <h6 class="card-subtitle mb-3 text-body-secondary">P 450.00</h6>
+                  <button class="btn btn-sm btn-light" id="btn2" onclick="addToCart(event)">Add to Cart</button>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+            <div class="card h-100  shadow p-3 mb-5">
+                <img src="https://imgur.com/huK0UqO.png"
+                  alt="hi" class="card-image-top">
+                <div class="card-body">
+                  <h5 class="card-title">Barbie and Dogs</h5>
+                  <h6 class="card-subtitle mb-3 text-body-secondary">P 750.00</h6>
+                  <button class="btn btn-sm btn-light" id="btn3" onclick="addToCart(event)">Add to Cart</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="row g-4">
+            <div class="col">
+            <div class="card h-100  shadow p-3 mb-5">
+                <img src="https://imgur.com/bWS0iiB.png"
+                  alt="hi" class="card-image-top">
+                <div class="card-body">
+                  <h5 class="card-title">Barbie on a Car</h5>
+                  <h6 class="card-subtitle mb-3 text-body-secondary">P 800.00</h6>
+                  <button class="btn btn-sm btn-light" id="btn4" onclick="addToCart(event)">Add to Cart</button>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+            <div class="card h-100  shadow p-3 mb-5">
+                <img src="https://imgur.com/1Ue578f.png"
+                  alt="hi" class="card-image-top">
+                <div class="card-body">
+                  <h5 class="card-title">Baby Alive Lulu Achoo</h5>
+                  <h6 class="card-subtitle mb-3 text-body-secondary">P 1,000.00</h6>
+                  <button class="btn btn-sm btn-light" id="btn5" onclick="addToCart(event)">Add to Cart</button>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+            <div class="card h-100  shadow p-3 mb-5">
+                <img src="https://imgur.com/3b8YhIc.png"
+                  alt="hi" class="card-image-top">
+                <div class="card-body">
+                  <h5 class="card-title">Baby Alive Happy Hungry</h5>
+                  <h6 class="card-subtitle mb-3 text-body-secondary">P 1,000.00</h6>
+                  <button class="btn btn-sm btn-light" id="btn6" onclick="addToCart(event)">Add to Cart</button>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+      <br>
+
+      <div id="Cars">
+        <h1>Cars and Trucks</h1>
+        <div class="row g-4">
+          <div class="col">
+            <div class="card h-100  shadow p-3 mb-5">
+              <img src="https://imgur.com/xv7KWFQ.png" alt="hi"
+                class="card-image-top">
+              <div class="card-body">
+                <h5 class="card-title">Hot Wheels Porsche 935</h5>
+                <h6 class="card-subtitle mb-3 text-body-secondary">P 300.00</h6>
+                <button class="btn btn-sm btn-light" id="btn7" onclick="addToCart(event)">Add to Cart</button>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card h-100  shadow p-3 mb-5">
+              <img src="https://imgur.com/Fq1QIPZ.png"
+                alt="hi" class="card-image-top">
+              <div class="card-body">
+                <h5 class="card-title">Hot Wheels '70 Dodge Charger</h5>
+                <h6 class="card-subtitle mb-3 text-body-secondary">P 300.00</h6>
+                <button class="btn btn-sm btn-light" id="btn8" onclick="addToCart(event)">Add to Cart</button>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card h-100  shadow p-3 mb-5">
+              <img src="https://imgur.com/GnlT1ce.png" alt="hi"
+                class="card-image-top">
+              <div class="card-body">
+                <h5 class="card-title">CAT Construction Toy Dump Truck</h5>
+                <h6 class="card-subtitle mb-3 text-body-secondary">P 600.00</h6>
+                <button class="btn btn-sm btn-light" id="btn9" onclick="addToCart(event)">Add to Cart</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <br>
+        <div class="row g-4">
+          <div class="col">
+            <div class="card h-100  shadow p-3 mb-5">
+              <img src="https://imgur.com/hiicT5W.png" alt="hi"
+                class="card-image-top">
+              <div class="card-body">
+                <h5 class="card-title">CAT Construction Toy Excavator</h5>
+                <h6 class="card-subtitle mb-3 text-body-secondary">P 700.00</h6>
+                <button class="btn btn-sm btn-light" id="btn10" onclick="addToCart(event)">Add to Cart</button>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card h-100  shadow p-3 mb-5">
+              <img src="https://imgur.com/6DKUxR0.png" alt="hi"
+                class="card-image-top">
+              <div class="card-body">
+                <h5 class="card-title">Remote Control Racing Car (Lamborghini)</h5>
+                <h6 class="card-subtitle mb-3 text-body-secondary">P 1,650.00</h6>
+                <button class="btn btn-sm btn-light" id="btn11" onclick="addToCart(event)">Add to Cart</button>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card h-100  shadow p-3 mb-5">
+              <img src="https://imgur.com/QVd4qTY.png" alt="hi"
+                class="card-image-top">
+              <div class="card-body">
+                <h5 class="card-title">Optimus Prime Remote Control Toy</h5>
+                <h6 class="card-subtitle mb-3 text-body-secondary">P 2,000.00</h6>
+                <button class="btn btn-sm btn-light" id="btn12" onclick="addToCart(event)">Add to Cart</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+      <div id="Sets">
+        <h1>Toy Sets</h1>
+        <div class="row g-4">
+          <div class="col">
+            <div class="card h-100  shadow p-3 mb-5">
+              <img src="https://imgur.com/IUfzMRr.png" alt="hi"
+                class="card-image-top">
+              <div class="card-body">
+                <h5 class="card-title">Kitchen Toy Set</h5>
+                <h6 class="card-subtitle mb-3 text-body-secondary">P 1,350.00</h6>
+                <button class="btn btn-sm btn-light" id="btn13" onclick="addToCart(event)">Add to Cart</button>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card h-100  shadow p-3 mb-5">
+              <img src="https://imgur.com/wi1oPVd.png" alt="hi"
+                class="card-image-top">
+              <div class="card-body">
+                <h5 class="card-title">Medical Doctor Playset</h5>
+                <h6 class="card-subtitle mb-3 text-body-secondary">P 1,200.00</h6>
+                <button class="btn btn-sm btn-light" id="btn14" onclick="addToCart(event)">Add to Cart</button>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card h-100  shadow p-3 mb-5">
+              <img src="https://imgur.com/nNLyytH.png" alt="hi"
+                class="card-image-top">
+              <div class="card-body">
+                <h5 class="card-title">Paw Patrol Lifeguard Pups Action Pack Gift Set</h5>
+                <h6 class="card-subtitle mb-3 text-body-secondary">P 1,735.00</h6>
+                <button class="btn btn-sm btn-light" id="btn15" onclick="addToCart(event)">Add to Cart</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <br>
+        <div class="row g-4">
+          <div class="col">
+            <div class="card h-100  shadow p-3 mb-5">
+              <img src="https://imgur.com/uh6ID5h.png" alt="hi"
+                class="card-image-top">
+              <div class="card-body">
+                <h5 class="card-title">Sylvanian Families Red Roof Country Home Gift Set</h5>
+                <h6 class="card-subtitle mb-3 text-body-secondary">P 5,340.00</h6>
+                <button class="btn btn-sm btn-light" id="btn16" onclick="addToCart(event)">Add to Cart</button>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card h-100  shadow p-3 mb-5">
+              <img src="https://imgur.com/92OI16U.png" alt="hi"
+                class="card-image-top">
+              <div class="card-body">
+                <h5 class="card-title">Cashier Toy - Cash Register Playset</h5>
+                <h6 class="card-subtitle mb-3 text-body-secondary">P 2,370.00</h6>
+                <button class="btn btn-sm btn-light" id="btn17" onclick="addToCart(event)">Add to Cart</button>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card h-100  shadow p-3 mb-5">
+              <img src="https://imgur.com/6uGDf8E.png" alt="hi"
+                class="card-image-top">
+              <div class="card-body">
+                <h5 class="card-title">BBQ Grill Toy Set</h5>
+                <h6 class="card-subtitle mb-3 text-body-secondary">P 2,500.00</h6>
+                <button class="btn btn-sm btn-light" id="btn18" onclick="addToCart(event)">Add to Cart</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+      <div id="Misc">
+        <h1>Miscellaneous</h1>
+        <div class="row g-4">
+          <div class="col">
+            <div class="card h-100  shadow p-3 mb-5">
+              <img src="https://imgur.com/kQoFjBm.png" alt="hi"
+                class="card-image-top">
+              <div class="card-body">
+                <h5 class="card-title">Slime (20 per container)</h5>
+                <h6 class="card-subtitle mb-3 text-body-secondary">P 20.00</h6>
+                <button class="btn btn-sm btn-light" id="btn19" onclick="addToCart(event)">Add to Cart</button>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card h-100  shadow p-3 mb-5">
+              <img src="https://imgur.com/96PoaQA.png" alt="hi"
+                class="card-image-top">
+              <div class="card-body">
+                <h5 class="card-title">Building Blocks</h5>
+                <h6 class="card-subtitle mb-3 text-body-secondary">P 1,000.00</h6>
+                <button class="btn btn-sm btn-light" id="btn20" onclick="addToCart(event)">Add to Cart</button>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card h-100  shadow p-3 mb-5">
+              <img src="https://imgur.com/yQVJCCS.png" alt="hi"
+                class="card-image-top">
+              <div class="card-body">
+                <h5 class="card-title">Pop It</h5>
+                <h6 class="card-subtitle mb-3 text-body-secondary">P 375.00</h6>
+                <button class="btn btn-sm btn-light" id="btn21" onclick="addToCart(event)">Add to Cart</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <br>
+        <div class="row g-4">
+          <div class="col">
+            <div class="card h-100  shadow p-3 mb-5">
+              <img src="https://imgur.com/vqswvvQ.png" alt="hi"
+                class="card-image-top">
+              <div class="card-body">
+                <h5 class="card-title">Fidget Spinner</h5>
+                <h6 class="card-subtitle mb-3 text-body-secondary">P 100.00</h6>
+                <button class="btn btn-sm btn-light" id="btn22" onclick="addToCart(event)">Add to Cart</button>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card h-100  shadow p-3 mb-5">
+              <img src="https://imgur.com/6W4BsAi.png" alt="hi"
+                class="card-image-top">
+              <div class="card-body">
+                <h5 class="card-title">Stress Ball</h5>
+                <h6 class="card-subtitle mb-3 text-body-secondary">P 300.00</h6>
+                <button class="btn btn-sm btn-light" id="btn23" onclick="addToCart(event)">Add to Cart</button>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card h-100  shadow p-3 mb-5">
+              <img src="https://imgur.com/YkdzOJE.png" alt="hi"
+                class="card-image-top">
+              <div class="card-body">
+                <h5 class="card-title">Rubik's Cube</h5>
+                <h6 class="card-subtitle mb-3 text-body-secondary">P 500.00</h6>
+                <button class="btn btn-sm btn-light" id="btn24" onclick="addToCart(event)">Add to Cart</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+
+    </div>
+
+  </div>
+
+  <hr>
+  <footer>
+    <p>Copyright &copy; 2023. ToysForReal. All Rights Reserved. || Fairy Lei S. Cara || Maria Katrina "Faith" F.
+      Hernandez || Gabrei Micko L. Santos</p>
+  </footer>
+
+</body>
+
+</html>
